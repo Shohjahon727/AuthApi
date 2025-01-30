@@ -1,14 +1,9 @@
 ﻿using Jwt_with.net9.Entities;
 using Jwt_with.net9.Models;
 using Jwt_with.net9.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Jwt_with.net9.Controllers
 {
@@ -38,7 +33,12 @@ namespace Jwt_with.net9.Controllers
 			}
 			return Ok(result);
 		}
-
+		[HttpPost("logout")]
+		public IActionResult Logout()
+		{
+			HttpContext.SignOutAsync();
+			return Ok(new { message = "Logged out successfully" });
+		}
 		[HttpPost("refresh-token")]
 		public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
 		{

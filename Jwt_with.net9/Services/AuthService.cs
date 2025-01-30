@@ -35,17 +35,8 @@ namespace Jwt_with.net9.Services
 			{
 				return null;
 			}
-
+			
 			return await CreateTokenResponse(user);
-		}
-
-		private async Task<TokenResponseDto> CreateTokenResponse(User? user)
-		{
-			return new TokenResponseDto
-			{
-				AccessToken = CreateToken(user),
-				RefreshToken = await GenerateAndSaveRefreshToken(user)
-			};
 		}
 
 		public async Task<User?> RegisterAsync(UserDto userDto)
@@ -62,10 +53,23 @@ namespace Jwt_with.net9.Services
 			user.PasswordHash = hashedPassword;
 
 			await _context.Users.AddAsync(user);
+
+			await CreateTokenResponse(user);
 			await _context.SaveChangesAsync();
 			return user;
 		}
-
+		private async Task<TokenResponseDto> CreateTokenResponse(User? user)
+		{
+			return new TokenResponseDto
+			{
+				AccessToken = CreateToken(user),
+				RefreshToken = await GenerateAndSaveRefreshToken(user),
+				User = new UserDto
+				{
+					Username = user.Username,
+				}
+			};
+		}
 		public async Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto request)
 		{
 			var user = await ValidateRefreshTokenAsync(request.UserId, request.RefreshToken);

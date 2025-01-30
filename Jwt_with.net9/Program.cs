@@ -10,6 +10,16 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// CORS siyosatini qo‘shing
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowAllOrigins", policy =>
+	{
+		policy.AllowAnyOrigin()   // Barcha domenlarga ruxsat
+			  .AllowAnyMethod()   // Har qanday HTTP metodlariga ruxsat
+			  .AllowAnyHeader();  // Har qanday headerlarga ruxsat
+	});
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -38,7 +48,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 var app = builder.Build();
-
+// CORS siyosatini qo‘llang
+app.UseCors("AllowAllOrigins");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
