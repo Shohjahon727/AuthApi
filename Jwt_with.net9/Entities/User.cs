@@ -1,4 +1,6 @@
-﻿namespace Jwt_with.net9.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Jwt_with.net9.Entities
 {
 	public class User
 	{

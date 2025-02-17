@@ -64,6 +64,8 @@ namespace Jwt_with.net9.Services
 			{
 				AccessToken = CreateToken(user),
 				RefreshToken = await GenerateAndSaveRefreshToken(user),
+				Role = user.Role,
+				
 				User = new UserDto
 				{
 					Username = user.Username,
